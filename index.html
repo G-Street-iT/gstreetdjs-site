@@ -396,7 +396,10 @@ footer{border-top:1px solid var(--line);padding-block:48px 36px;background:#0808
 .portal-bar .pb-home img{width:18px;height:18px}
 .portal-bar nav{display:flex;gap:18px;overflow-x:auto;scrollbar-width:none}
 .portal-bar nav a[aria-current]{color:var(--orange)}
-@media (max-width:640px){.portal-bar .wrap{justify-content:center}.portal-bar .pb-home{display:none}.portal-bar{letter-spacing:.04em;font-size:.66rem}.portal-bar nav{gap:10px}}
+.portal-bar .pb-home{color:var(--ink-2)}
+.portal-bar .pb-short{display:none}
+@media (max-width:900px){.portal-bar .pb-long{display:none}.portal-bar .pb-short{display:inline}}
+@media (max-width:640px){.portal-bar nav{display:none}.portal-bar .wrap{justify-content:center}}
 
 </style>
 </head>
@@ -405,10 +408,10 @@ footer{border-top:1px solid var(--line);padding-block:48px 36px;background:#0808
 
 <div class="portal-bar">
   <div class="wrap">
-    <a href="https://www.gstreetportal.com/home" target="_blank" rel="noopener" class="pb-home"><img src="assets/gstreet-seal.webp" alt="" width="18" height="18">A G Street Portal business</a>
+    <a href="https://www.gstreetportal.com/home" class="pb-home"><span aria-hidden="true">←</span><img src="assets/gstreet-seal.webp" alt="" width="18" height="18"><span class="pb-long">Click here to go back to the G Street Business Portal</span><span class="pb-short">Back to G Street Business Portal</span></a>
     <nav aria-label="G Street Portal businesses">
-      <a href="https://www.gstreetportal.com/taxes-bookkeeping" target="_blank" rel="noopener">Taxes &amp; Bookkeeping</a>
-      <a href="https://www.gstreetportal.com/it-solutions" target="_blank" rel="noopener">iT Solutions</a>
+      <a href="https://www.gstreetportal.com/taxes-bookkeeping">Taxes &amp; Bookkeeping</a>
+      <a href="https://www.gstreetportal.com/it-solutions">iT Solutions</a>
       <a href="#top" aria-current="page">DJ &amp; Karaoke</a>
     </nav>
   </div>
