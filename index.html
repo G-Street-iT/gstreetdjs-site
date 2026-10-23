@@ -234,7 +234,7 @@ body.playing .track.on .n span{display:none}
 .pkg li::before{content:"";width:8px;height:8px;margin-top:8px;border-radius:2px;background:var(--orange);transform:rotate(45deg)}
 .pkg .pick{font-family:var(--f-label);text-transform:uppercase;letter-spacing:.12em;font-size:.8rem;color:var(--ink-3)}
 .pkg:has(input:checked) .pick{color:var(--orange-hi)}
-@media (max-width:900px){.pkgs{grid-template-columns:1fr}}
+
 
 .estimator{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px}
 .est-panel{border:1px solid var(--line);border-radius:var(--r);background:var(--deck);padding:clamp(20px,3vw,32px);display:grid;gap:26px;align-content:start}
@@ -399,6 +399,19 @@ footer{border-top:1px solid var(--line);padding-block:48px 36px;background:#0808
 .portal-bar nav a[aria-current]{color:var(--orange)}
 @media (max-width:640px){.portal-bar .wrap{justify-content:center}.portal-bar{letter-spacing:.04em;font-size:.66rem}.portal-bar nav{gap:10px}}
 
+/* Planner app CTA */
+.planner-side{display:grid;gap:22px;justify-items:center;min-width:0}
+.app-cta{min-height:58px;padding:0 30px;font-size:1.05rem;box-shadow:0 12px 36px -10px rgba(230,115,0,.7)}
+.app-cta svg{width:20px;height:20px}
+.app-link{font-size:.95rem;color:var(--ink-2);text-decoration:none;width:fit-content}
+.app-link b{color:var(--orange);font-weight:600;transition:color .2s}
+.app-link:hover b{color:var(--orange-hi)}
+@media (max-width:860px){.planner-side{order:-1}}
+/* 4 packages */
+.pkgs{grid-template-columns:repeat(4,1fr)}
+@media (max-width:1180px){.pkgs{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:640px){.pkgs{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -448,6 +461,7 @@ footer{border-top:1px solid var(--line);padding-block:48px 36px;background:#0808
             <button class="btn btn-hot" type="submit">Check Availability
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
           </form>
+          <a class="app-link" data-planner href="https://plan.gstreetdjs.com/index.html" target="_blank" rel="noopener">Already booked? <b>Plan your event in the G Street app →</b></a>
           <div class="hero-meta"><span>Weddings</span><span>Corporate</span><span>Club nights</span><span>Karaoke</span></div>
         </div>
         <div class="platter" aria-hidden="true">
@@ -553,6 +567,9 @@ footer{border-top:1px solid var(--line);padding-block:48px 36px;background:#0808
           <a class="btn btn-ghost" href="#book">Not booked yet?</a>
         </div>
       </div>
+      <div class="planner-side">
+        <a class="btn btn-hot app-cta" data-planner href="https://plan.gstreetdjs.com/index.html" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg>Open the App</a>
       <div class="phone rv" aria-hidden="true">
         <div class="screen">
           <div class="screen-top"><img src="assets/gstreet-seal.webp" alt=""><div><b>G STREET DJS</b><small>Event Planner · Tony Spinning G</small></div></div>
@@ -567,6 +584,7 @@ footer{border-top:1px solid var(--line);padding-block:48px 36px;background:#0808
             <div class="s-card"><h4>Guest requests</h4><div class="s-row"><span>New this week</span><span>+12</span></div></div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   </section>
@@ -779,15 +797,17 @@ const CONFIG = {
       items: ["Everything in Essential", "Sound for up to 250 guests", "Dance-floor lighting", "Timeline & vendor coordination"] },
     { id: "premier", name: "Premier", price: 1795, hours: 6, blurb: "The full production",
       items: ["Everything in Signature", "Ceremony or second-room audio", "Room uplighting", "Karaoke setup included"] },
+    { id: "karaoke", name: "Karaoke Night", price: 349, hours: 3, extraHour: 99, eventType: "Karaoke Night", blurb: "Karaoke only",
+      items: ["Live karaoke host", "Pro sound + 2 wireless mics", "Lyrics screen + huge song library", "Music between singers", `Extra hours $99 each`] },
   ],
   EXTRA_HOUR: 175,
   ADDONS: [
-    { id: "karaoke", name: "Karaoke setup", note: "Lyric screen, 2 mics, song library", price: 250, includedIn: ["premier"] },
+    { id: "karaoke", name: "Karaoke setup", note: "Lyric screen, 2 mics, song library", price: 250, includedIn: ["premier", "karaoke"] },
     { id: "uplight", name: "Room uplighting", note: "Color-matched to your theme", price: 300, includedIn: ["premier"] },
-    { id: "ceremony", name: "Ceremony audio", note: "Separate system + lapel mic", price: 200, includedIn: ["premier"] },
+    { id: "ceremony", name: "Ceremony audio", note: "Separate system + lapel mic", price: 200, includedIn: ["premier"], notFor: ["karaoke"] },
     { id: "lights", name: "Moving-head dance lights", note: "Club-style beams and effects", price: 250 },
-    { id: "monogram", name: "Monogram projection", note: "Names or logo on the wall or floor", price: 150 },
-    { id: "clouds", name: "Dancing on the clouds", note: "Low-lying fog for the first dance", price: 300 },
+    { id: "monogram", name: "Monogram projection", note: "Names or logo on the wall or floor", price: 150, notFor: ["karaoke"] },
+    { id: "clouds", name: "Dancing on the clouds", note: "Low-lying fog for the first dance", price: 300, notFor: ["karaoke"] },
   ],
   ZONES: [
     { id: "local", name: "Fort Wayne · Avilla · Auburn", fee: 0 },
@@ -802,7 +822,7 @@ const CONFIG = {
 
   FAQ: [
     ["What kind of music do you play?", "Music from all decades and genres. Rock ballads, country, house, R&B, hip-hop, merengue, salsa, bachata and everything in between. You tell us your must-plays and do-not-plays in the planner and we read the room from there."],
-    ["Do you do karaoke?", "Yes. Karaoke can be its own night or part of a party or reception. We bring the lyric screen, microphones and a big song library, and we host so guests feel comfortable stepping up."],
+    ["Do you do karaoke?", "Yes. Our Karaoke Night package is $349 for 3 hours ($99 per extra hour), or add karaoke to any DJ package. Karaoke can be its own night or part of a party or reception. We bring the lyric screen, microphones and a big song library, and we host so guests feel comfortable stepping up."],
     ["What areas do you serve?", "Fort Wayne, Avilla, Auburn and the rest of northeast Indiana, plus the Chicago area. Travel outside the local area is shown in the price estimator."],
     ["How far ahead should we book?", "Popular Saturdays in wedding season go first, so earlier is better. Send an inquiry with your date and we'll tell you right away if it's open."],
     ["How do we plan the music and timeline?", "Once you book you get a login to the G Street Event Planner. You build your timeline, music lists and guest requests there, and we use it to run your event."],
@@ -1047,7 +1067,7 @@ $("#estType").innerHTML = CONFIG.EVENT_TYPES.map(t => `<option>${t}</option>`).j
 $("#fType").innerHTML = `<option value="">Choose one</option>` + CONFIG.EVENT_TYPES.map(t => `<option>${t}</option>`).join("");
 $("#estZone").innerHTML = CONFIG.ZONES.map(z => `<option value="${z.id}">${z.name}${z.fee ? ` (+${money(z.fee)})` : ""}</option>`).join("");
 function renderAddons() {
-  $("#addons").innerHTML = CONFIG.ADDONS.map(a => {
+  $("#addons").innerHTML = CONFIG.ADDONS.filter(a => !(a.notFor || []).includes(E.pkg)).map(a => {
     const inc = (a.includedIn || []).includes(E.pkg);
     return `<label class="addon"><input type="checkbox" value="${a.id}" ${inc || E.addons.has(a.id) ? "checked" : ""} ${inc ? "disabled" : ""}>
       <span><b>${a.name}</b><small>${a.note}</small></span><span class="amt">${inc ? "Included" : "+" + money(a.price)}</span></label>`;
@@ -1064,19 +1084,30 @@ function calc() {
   const p = CONFIG.PACKAGES.find(x => x.id === E.pkg), z = CONFIG.ZONES.find(x => x.id === E.zone);
   const extraH = Math.max(0, E.hours - p.hours);
   const lines = [[`${p.name} package (${p.hours} hrs)`, p.price]];
-  if (extraH) lines.push([`${extraH} extra hour${extraH > 1 ? "s" : ""}`, extraH * CONFIG.EXTRA_HOUR]);
-  CONFIG.ADDONS.forEach(a => { if (E.addons.has(a.id) && !(a.includedIn || []).includes(E.pkg)) lines.push([a.name, a.price]); });
+  const hr = p.extraHour ?? CONFIG.EXTRA_HOUR;
+  if (extraH) lines.push([`${extraH} extra hour${extraH > 1 ? "s" : ""} × ${money(hr)}`, extraH * hr]);
+  CONFIG.ADDONS.forEach(a => { if (E.addons.has(a.id) && !(a.includedIn || []).includes(E.pkg) && !(a.notFor || []).includes(E.pkg)) lines.push([a.name, a.price]); });
   if (z.fee) lines.push([`Travel · ${z.name}`, z.fee]);
   const total = lines.reduce((s, l) => s + l[1], 0);
   $("#estLines").innerHTML = lines.map(([k, v]) => `<div><dt>${k}</dt><dd>${money(v)}</dd></div>`).join("");
   $("#hrOut").textContent = E.hours;
   E.total = total; E.lines = lines; animateTo(total);
 }
-$$("#pkgs input").forEach(r => r.addEventListener("change", () => { E.pkg = r.value; const p = CONFIG.PACKAGES.find(x => x.id === E.pkg); if (E.hours < p.hours) E.hours = p.hours; renderAddons(); calc(); }));
+$$("#pkgs input").forEach(r => r.addEventListener("change", () => {
+  const prev = CONFIG.PACKAGES.find(x => x.id === E.pkg); E.pkg = r.value; const p = CONFIG.PACKAGES.find(x => x.id === E.pkg);
+  if (E.hours < p.hours || (prev && E.hours === prev.hours)) E.hours = p.hours;
+  if (p.eventType) { E.type = p.eventType; $("#estType").value = p.eventType; }
+  else if (prev && prev.eventType && E.type === prev.eventType) { E.type = CONFIG.EVENT_TYPES[0]; $("#estType").value = E.type; }
+  renderAddons(); calc();
+}));
 $("#hrMinus").addEventListener("click", () => { const p = CONFIG.PACKAGES.find(x => x.id === E.pkg); if (E.hours > p.hours) { E.hours--; calc(); } else toast(`${p.name} includes ${p.hours} hours`); });
 $("#hrPlus").addEventListener("click", () => { if (E.hours < 12) { E.hours++; calc(); } });
 $("#estZone").addEventListener("change", e => { E.zone = e.target.value; calc(); });
-$("#estType").addEventListener("change", e => { E.type = e.target.value; });
+$("#estType").addEventListener("change", e => {
+  E.type = e.target.value;
+  const kp = CONFIG.PACKAGES.find(p => p.eventType === E.type);
+  if (kp && E.pkg !== kp.id) { const r = $(`#pkgs input[value="${kp.id}"]`); r.checked = true; r.dispatchEvent(new Event("change")); }
+});
 renderAddons(); calc();
 
 let attachedEstimate = null;
