@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://gstreetdjs.com/sitemap.xml
