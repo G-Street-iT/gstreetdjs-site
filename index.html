@@ -774,8 +774,7 @@ footer{border-top:1px solid var(--line);padding-block:48px 36px;background:#0808
 const CONFIG = {
   // Booking + song-request backend (Supabase Edge Function "site-inquiry").
   // Leave blank to run in preview mode (forms validate and show success, nothing is sent).
-  SUPABASE_URL: "",          // e.g. "https://abcd1234.supabase.co"
-  SUPABASE_ANON_KEY: "",     // public anon key (safe for the browser)
+  SUPABASE_URL: "https://kyyzqqbmvjugfotukkoh.supabase.co",  // gstreet-planner project
   PLANNER_URL: "https://plan.gstreetdjs.com/index.html",
 
   // Mixes & Media section. Set to true once your recordings are uploaded.
@@ -1221,7 +1220,7 @@ async function send(kind, payload) {
   if (!CONFIG.SUPABASE_URL) { await new Promise(r => setTimeout(r, 900)); return { preview: true }; }
   const r = await fetch(`${CONFIG.SUPABASE_URL}/functions/v1/site-inquiry`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", apikey: CONFIG.SUPABASE_ANON_KEY, Authorization: `Bearer ${CONFIG.SUPABASE_ANON_KEY}` },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ kind, ...payload }),
   });
   if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || "Request failed");
