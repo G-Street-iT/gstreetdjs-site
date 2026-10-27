@@ -412,6 +412,16 @@ footer{border-top:1px solid var(--line);padding-block:48px 36px;background:#0808
 @media (max-width:1180px){.pkgs{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:640px){.pkgs{grid-template-columns:1fr}}
 
+/* Reserve your date */
+.card.reserve{border-color:rgba(230,115,0,.55);background:radial-gradient(120% 90% at 0% 0%,rgba(230,115,0,.16),var(--deck) 60%);gap:14px}
+.hold-btns{display:flex;flex-wrap:wrap;gap:10px}
+.hold-btns .btn{flex:1 1 200px;font-size:.92rem;padding:0 16px}
+.hold-terms{margin:0;padding-left:18px;color:var(--ink-2);font-size:.9rem;display:grid;gap:6px}
+.secure{display:flex;align-items:center;gap:8px;color:var(--ink-3);font-size:.82rem}
+.secure svg{width:14px;height:14px;fill:currentColor;flex:none}
+.hold-link{color:var(--orange-ink);font-weight:600;text-decoration:underline;text-underline-offset:3px;font-size:.95rem}
+.hold-link:hover{color:#000}
+
 </style>
 </head>
 <body>
@@ -617,6 +627,7 @@ footer{border-top:1px solid var(--line);padding-block:48px 36px;background:#0808
           <div class="big" id="estTotal">$0</div>
           <dl id="estLines"></dl>
           <button class="btn" id="useEst" type="button">Send with my inquiry</button>
+          <a class="hold-link" id="estHold" href="#reserve">Ready? Hold this date now for <b id="estHoldAmt">$99</b> →</a>
           <p class="fine">Estimate only. Your final quote is confirmed after we talk through your event.</p>
         </aside>
       </div>
@@ -673,6 +684,22 @@ footer{border-top:1px solid var(--line);padding-block:48px 36px;background:#0808
         <p class="label">Check availability</p>
         <h2 id="bookTitle">Let's have some fun</h2>
         <p class="lede">Tell us about your event. We'll confirm your date and send a quote. Dates book up fast in wedding season.</p>
+        <div class="card reserve" id="reserve">
+          <p class="label">Reserve your date</p>
+          <h3>Lock in your date before someone else does</h3>
+          <p style="color:var(--ink-2)">One DJ, one event per night. Pay a small hold and your date is set aside while we finalize your contract.</p>
+          <div class="hold-btns">
+            <a class="btn btn-hot" data-hold="dj" href="#" target="_blank" rel="noopener">DJ package · $99 hold</a>
+            <a class="btn btn-ghost" data-hold="karaoke" href="#" target="_blank" rel="noopener">Karaoke Night · $49 hold</a>
+          </div>
+          <ul class="hold-terms">
+            <li>Your hold is applied to your package total.</li>
+            <li>Non-refundable, but you can move it to a new date within 12 months.</li>
+            <li>We confirm your date within 24 hours. If it's already booked, you choose a new date and your hold moves with you.</li>
+            <li>A 25% retainer is due within 14 days of signing your contract. Dates open up to 18 months out.</li>
+          </ul>
+          <p class="secure"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1zm2 0h6V7a3 3 0 0 0-6 0z"/></svg>Secure checkout by Stripe. Cards, Apple Pay and Google Pay accepted.</p>
+        </div>
         <div class="card"><h3>What happens next</h3>
           <p style="color:var(--ink-2)">We check the calendar and reply with availability and a quote. Once you book, you get a login to the G Street Event Planner.</p></div>
         <div class="card"><h3>Serving</h3>
@@ -777,6 +804,12 @@ const CONFIG = {
   SUPABASE_URL: "https://kyyzqqbmvjugfotukkoh.supabase.co",  // gstreet-planner project
   PLANNER_URL: "https://plan.gstreetdjs.com/index.html",
 
+  // Stripe Payment Links for the "Reserve your date" hold (G Street DJs Stripe account)
+  HOLD_LINKS: {
+    dj: { url: "https://book.stripe.com/8x27sMe5E6r1bow5Be9k400", amount: 99 },
+    karaoke: { url: "https://book.stripe.com/4gM4gA8Lk8z9csA4xa9k401", amount: 49 },
+  },
+
   // Mixes & Media section. Set to true once your recordings are uploaded.
   SHOW_MIXES: false,
 
@@ -823,6 +856,7 @@ const CONFIG = {
     ["What kind of music do you play?", "Music from all decades and genres. Rock ballads, country, house, R&B, hip-hop, merengue, salsa, bachata and everything in between. You tell us your must-plays and do-not-plays in the planner and we read the room from there."],
     ["Do you do karaoke?", "Yes. Our Karaoke Night package is $349 for 3 hours ($99 per extra hour), or add karaoke to any DJ package. Karaoke can be its own night or part of a party or reception. We bring the lyric screen, microphones and a big song library, and we host so guests feel comfortable stepping up."],
     ["What areas do you serve?", "Fort Wayne, Avilla, Auburn and the rest of northeast Indiana, plus the Chicago area. Travel outside the local area is shown in the price estimator."],
+    ["How do I reserve my date?", "Use the Reserve your date buttons in the booking section. A $99 hold (DJ packages) or $49 hold (Karaoke Night) sets your date aside and is applied to your package. It is non-refundable but can move to a new date within 12 months. We confirm within 24 hours. If your date is already taken, you choose a new date and your hold moves with you. A 25% retainer is due within 14 days of signing your contract."],
     ["How far ahead should we book?", "Popular Saturdays in wedding season go first, so earlier is better. Send an inquiry with your date and we'll tell you right away if it's open."],
     ["How do we plan the music and timeline?", "Once you book you get a login to the G Street Event Planner. You build your timeline, music lists and guest requests there, and we use it to run your event."],
     ["Can you handle speeches and announcements?", "Yes. Every package includes a wireless microphone and MC work for introductions, toasts and key moments."],
@@ -1260,6 +1294,16 @@ $("#quickCheck").addEventListener("submit", e => {
   $("#book").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
   setTimeout(() => $(v ? "#fName" : "#fDate").focus({ preventScroll: true }), 650);
 });
+
+/* ---------- Reserve your date (Stripe Payment Links) ---------- */
+$$("[data-hold]").forEach(a => { const h = CONFIG.HOLD_LINKS[a.dataset.hold]; if (h) a.href = h.url; });
+function syncHold() {
+  const k = E.pkg === "karaoke" ? "karaoke" : "dj", h = CONFIG.HOLD_LINKS[k];
+  const el = $("#estHold"); el.href = h.url; el.target = "_blank"; el.rel = "noopener";
+  $("#estHoldAmt").textContent = money(h.amount);
+}
+$$("#pkgs input").forEach(r => r.addEventListener("change", syncHold));
+syncHold();
 
 </script>
 </body>
