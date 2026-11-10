@@ -288,10 +288,16 @@ select.input{appearance:none;background-image:linear-gradient(45deg,transparent 
 .gallery{position:relative}
 .g-track{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding-bottom:6px;scrollbar-width:none;overscroll-behavior-x:contain}
 .g-track::-webkit-scrollbar{display:none}
-.g-item{flex:0 0 auto;height:clamp(260px,42vw,460px);scroll-snap-align:start;border-radius:var(--r);overflow:hidden;position:relative;cursor:zoom-in;border:0;padding:0;background:var(--deck)}
-.g-item img{height:100%;width:auto;max-width:none;object-fit:cover;transition:transform .6s,filter .4s;filter:brightness(.92)}
+.g-item{flex:0 0 auto;align-self:flex-start;max-width:100%;scroll-snap-align:start;border-radius:var(--r);overflow:hidden;position:relative;cursor:zoom-in;border:0;padding:0;background:var(--deck)}
+.g-item img{display:block;width:auto;height:auto;max-width:100%;max-height:clamp(260px,42vw,460px);transition:transform .6s,filter .4s;filter:brightness(.92)}
 .g-item:hover img{transform:scale(1.04);filter:brightness(1.02)}
 .g-item figcaption{position:absolute;left:12px;bottom:12px;font-family:var(--f-label);text-transform:uppercase;letter-spacing:.12em;font-size:.74rem;background:rgba(11,11,11,.75);padding:5px 10px;border-radius:99px;color:var(--ink)}
+/* Caption hugs the logos baked into the photo (logo block = 3% margin + 13% height) */
+.g-item.logo-bl figcaption,.g-item.logo-br figcaption{bottom:calc(16% + 6px)}
+.g-item.logo-br figcaption,.g-item.logo-tr figcaption{left:auto;right:12px}
+.g-item.logo-tl figcaption,.g-item.logo-tr figcaption{bottom:auto;top:calc(16% + 6px)}
+/* Per-photo override: caption in its own corner, e.g. to keep a face clear */
+.g-item.cap-br figcaption{top:auto;left:auto;bottom:12px;right:12px;max-width:calc(100% - 24px)}
 .g-nav{display:flex;align-items:center;gap:10px}
 .g-btn{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--deck);cursor:pointer;display:grid;place-items:center;transition:.2s}
 .g-btn:hover{border-color:var(--orange);color:var(--orange-hi)}
@@ -1162,26 +1168,26 @@ $$(".svc").forEach(c => c.addEventListener("click", () => { const t = c.dataset.
    GALLERY
    ========================================================================== */
 const PHOTOS = [
-  ["g-street-djs-tony-spinning-g-wedding-dj-8652.jpg", "Packed ballroom reception", "Wedding DJ: packed ballroom reception dance floor seen from the G Street DJs booth"],
-  ["g-street-djs-tony-spinning-g-wedding-dj-9254.jpg", "Wedding slow dance", "Wedding DJ: guests slow dancing around the bride at a reception with G Street DJs"],
-  ["g-street-djs-tony-spinning-g-wedding-dj-4830.jpg", "Line dance with the bride", "Wedding DJ: guests line dancing with the bride while Tony Spinning G mixes"],
-  ["g-street-djs-tony-spinning-g-wedding-dj-1517.jpg", "Wedding reception dance floor", "Wedding DJ: packed wedding reception dance floor seen from Tony Spinning G's controller and laptop"],
-  ["g-street-djs-tony-spinning-g-quinceanera-sweet-16-dj-4871.jpg", "Quinceañera & Sweet 16", "Quinceañera and Sweet 16 DJ: quinceañera in a lavender gown facing the G Street DJs speakers and lighting setup"],
-  ["g-street-djs-tony-spinning-g-sweet-16-dj-7636.jpg", "Sweet 16 dance floor", "Sweet 16 DJ: birthday girl in a tiara dancing with friends, costume characters and glow sticks on the G Street DJs dance floor"],
-  ["g-street-djs-tony-spinning-g-sweet-16-dj-5701.jpg", "Tony on the decks at a Sweet 16", "Sweet 16 DJ: Tony Spinning G of G Street DJs mixing on Pioneer DJ decks at a Sweet 16 party"],
+  ["g-street-djs-tony-spinning-g-wedding-dj-8652.jpg", "Packed ballroom reception", "Wedding DJ: packed ballroom reception dance floor seen from the G Street DJs booth", "br"],
+  ["g-street-djs-tony-spinning-g-wedding-dj-9254.jpg", "Wedding slow dance", "Wedding DJ: guests slow dancing around the bride at a reception with G Street DJs", "br"],
+  ["g-street-djs-tony-spinning-g-wedding-dj-4830.jpg", "Line dance with the bride", "Wedding DJ: guests line dancing with the bride while Tony Spinning G mixes", "br"],
+  ["g-street-djs-tony-spinning-g-wedding-dj-1517.jpg", "Wedding reception dance floor", "Wedding DJ: packed wedding reception dance floor seen from Tony Spinning G's controller and laptop", "bl"],
+  ["g-street-djs-tony-spinning-g-quinceanera-sweet-16-dj-4871.jpg", "Quinceañera & Sweet 16", "Quinceañera and Sweet 16 DJ: quinceañera in a lavender gown facing the G Street DJs speakers and lighting setup", "br"],
+  ["g-street-djs-tony-spinning-g-sweet-16-dj-7636.jpg", "Sweet 16 dance floor", "Sweet 16 DJ: birthday girl in a tiara dancing with friends, costume characters and glow sticks on the G Street DJs dance floor", "bl"],
+  ["g-street-djs-tony-spinning-g-sweet-16-dj-5701.jpg", "Tony on the decks at a Sweet 16", "Sweet 16 DJ: Tony Spinning G of G Street DJs mixing on Pioneer DJ decks at a Sweet 16 party", "tl", "br"],
   ["g-street-djs-tony-spinning-g-club-dj-3608.jpg", "Club night", "Club DJ: crowd with hands up in a nightclub while Tony Spinning G plays"],
   ["g-street-djs-tony-spinning-g-party-dj-7968.jpg", "Dance floor from the booth", "Party DJ: guests dancing under pink lights behind Tony Spinning G's turntable"],
-  ["g-street-djs-tony-spinning-g-corporate-event-dj-3972.jpg", "Ballpark suite setup", "Corporate event DJ: G Street DJs booth set up in a ballpark suite overlooking the field"],
+  ["g-street-djs-tony-spinning-g-corporate-event-dj-3972.jpg", "Ballpark suite setup", "Corporate event DJ: G Street DJs booth set up in a ballpark suite overlooking the field", "br"],
   ["g-street-djs-tony-spinning-g-wedding-dj-7771.jpg", "Reception in full swing", "Wedding DJ: full dance floor at a reception hall with G Street DJs"],
-  ["g-street-djs-tony-spinning-g-mobile-dj-6070.jpg", "Behind the booth", "Mobile DJ setup: behind the G Street DJs booth with a Rane System One controller, laptop and video screen in a chandelier ballroom"],
+  ["g-street-djs-tony-spinning-g-mobile-dj-6070.jpg", "Behind the booth", "Mobile DJ setup: behind the G Street DJs booth with a Rane System One controller, laptop and video screen in a chandelier ballroom", "bl"],
   ["g-street-djs-tony-spinning-g-mobile-dj-5508.jpg", "The DJ booth", "Mobile DJ: G Street DJs turntables and mixer in the DJ booth"],
-  ["g-street-djs-tony-spinning-g-block-party-dj-3306.jpg", "Street block party", "Block party DJ: street block party at night with an LED robot performer, seen from the G Street DJs booth under the tent"],
-  ["g-street-djs-tony-spinning-g-backyard-party-dj-7038.jpg", "Backyard BBQ party", "Backyard party DJ: guests dancing at a backyard BBQ under the tent at night with G Street DJs"],
-  ["g-street-djs-tony-spinning-g-banquet-hall-dj-2162.jpg", "Banquet hall setup", "Banquet hall DJ setup by G Street DJs before a wedding or corporate dinner"],
-  ["g-street-djs-tony-spinning-g-corporate-event-dj-1308.jpg", "In-store event", "Corporate event DJ: G Street DJs setup for an in-store retail event"],
+  ["g-street-djs-tony-spinning-g-block-party-dj-3306.jpg", "Street block party", "Block party DJ: street block party at night with an LED robot performer, seen from the G Street DJs booth under the tent", "br"],
+  ["g-street-djs-tony-spinning-g-backyard-party-dj-7038.jpg", "Backyard BBQ party", "Backyard party DJ: guests dancing at a backyard BBQ under the tent at night with G Street DJs", "br"],
+  ["g-street-djs-tony-spinning-g-banquet-hall-dj-2162.jpg", "Banquet hall setup", "Banquet hall DJ setup by G Street DJs before a wedding or corporate dinner", "br"],
+  ["g-street-djs-tony-spinning-g-corporate-event-dj-1308.jpg", "In-store event", "Corporate event DJ: G Street DJs setup for an in-store retail event", "bl"],
 ];
 const gTrack = $("#gTrack");
-gTrack.innerHTML = PHOTOS.map(([f, c, alt], i) => `<figure class="g-item" style="margin:0" data-i="${i}" role="button" tabindex="-1" aria-label="Open photo: ${c}"><img src="assets/${f}" alt="${alt || c}" loading="${i < 3 ? "eager" : "lazy"}"><figcaption>${c}</figcaption></figure>`).join("");
+gTrack.innerHTML = PHOTOS.map(([f, c, alt, logo, cap], i) => `<figure class="g-item${logo ? " logo-" + logo : ""}${cap ? " cap-" + cap : ""}" style="margin:0" data-i="${i}" role="button" tabindex="-1" aria-label="Open photo: ${c}"><img src="assets/${f}" alt="${alt || c}" loading="${i < 3 ? "eager" : "lazy"}"><figcaption>${c}</figcaption></figure>`).join("");
 $("#gDots").innerHTML = PHOTOS.map((_, i) => `<button aria-label="Go to photo ${i + 1}"></button>`).join("");
 const items = $$(".g-item", gTrack), dots = $$("#gDots button");
 const goTo = i => { i = (i + items.length) % items.length; gTrack.scrollTo({ left: items[i].offsetLeft - gTrack.offsetLeft, behavior: reduceMotion ? "auto" : "smooth" }); };
